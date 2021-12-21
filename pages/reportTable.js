@@ -2,26 +2,26 @@ import React from "react";
 import { timeSlots } from "../data";
 // import { useState} from 'react'
 
-const ReportTable = ({reports}) => {
-    // const  createTableFooter = (reports)=>{
- 
-    //     for (let h = 1; h < 16 ; h++) {
-    //       let tdTotalStoresPerHour = 0;
-    //       for (let s = 0; s < reports.length-1; s++) {
-    //         tdTotalStoresPerHour+=reports[s][h];
-    //       }
-    //       reports[reports.length -1].push(tdTotalStoresPerHour);      
-    //   }
-      
-    //   reports[reports.length-1].splice(0,0,"Totals")
-    //   return reports
+const ReportTable = ({ reports }) => {
+  // const  createTableFooter = (reports)=>{
 
-    // }
-    // let reportss = createTableFooter(reports)
-    // console.log(reports);
+  //     for (let h = 1; h < 16 ; h++) {
+  //       let tdTotalStoresPerHour = 0;
+  //       for (let s = 0; s < reports.length-1; s++) {
+  //         tdTotalStoresPerHour+=reports[s][h];
+  //       }
+  //       reports[reports.length -1].push(tdTotalStoresPerHour);
+  //   }
+
+  //   reports[reports.length-1].splice(0,0,"Totals")
+  //   return reports
+
+  // }
+  // let reportss = createTableFooter(reports)
+  // console.log(reports);
   return (
     <table>
-      <thead>
+      <thead className="bg-emerald-400">
         <tr>
           <th>Location</th>
           {timeSlots.map((hour, idx) => (
@@ -30,17 +30,21 @@ const ReportTable = ({reports}) => {
           <th>Totals</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="text-center">
         {reports.map((avgCookie, idx) => {
-
-          return <tr key={idx}>
-            {avgCookie.map((cookie, i) => {
-             return <td key={i}>{cookie}</td>
-            })}
-
-          </tr>
+         
+           let color = idx % 2 == 0? "bg-emerald-400": "bg-emerald-300"
+          
+          return (
+            <tr key={idx} className={color}>
+              {avgCookie.map((cookie, i) => {
+                return <td key={i}  className="border border-gray-600">{cookie}</td>;
+              })}
+            </tr>
+          );
         })}
       </tbody>
+
       <tfoot>
         <tr>
           <th>Totals</th>

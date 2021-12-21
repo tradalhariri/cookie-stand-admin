@@ -31,7 +31,7 @@ const Cookiestandadmin = () => {
         </div> 
 
       </main>
-      <Footer/>
+      <Footer locationsNum = {reports.length}/>
     </>
   );
 };
