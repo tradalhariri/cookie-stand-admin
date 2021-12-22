@@ -1,18 +1,31 @@
 import React from "react";
 import { useState} from 'react'
-const CreateForm = ({fromFormTOCookiestandadmin}) => {
-    const eventHandler = (e) => {
+const baseUrl ='https://backend-drf.herokuapp.com/';
+const creatCookieStandUrl = baseUrl+'api/v1/cookie_stands/';
+import axios from 'axios';
+
+const CreateForm =  ({fromFormTOCookiestandadmin,token}) => {
+const [result,setResult ] = useState("")
+const [results,setResults ] = useState([])
+
+const config={
+    headers: {"Authorization" : `Bearer ${token}`}
+}
+
+
+    const eventHandler = async(e) => {
       e.preventDefault();
       const cookieStand = {
         location: e.target.location.value,
-        minCustomers: e.target.min_customers.value,
-        maxCustomers: e.target.max_customers.value,
-        avgCookies: e.target.avg_cookies.value,
+        minimum_customers_per_hour: e.target.min_customers.value,
+        maximum_customers_per_hour: e.target.max_customers.value,
+        average_cookies_per_sale: e.target.avg_cookies.value,
       }
+
       const calcAvgCookiePerHour = (cookieStand)=>{
           
-          const randCustomer = Math.floor(Math.random() * (Math.floor(parseInt(cookieStand.maxCustomers)) - Math.ceil(parseInt( cookieStand.minCustomers)) + 1) + Math.ceil(parseInt( cookieStand.minCustomers)) );
-          return Math.floor(randCustomer * parseFloat(cookieStand.avgCookies));
+          const randCustomer = Math.floor(Math.random() * (Math.floor(parseInt(cookieStand.maximum_customers_per_hour)) - Math.ceil(parseInt( cookieStand.minimum_customers_per_hour)) + 1) + Math.ceil(parseInt( cookieStand.minimum_customers_per_hour)) );
+          return Math.floor(randCustomer * parseFloat(cookieStand.average_cookies_per_sale));
   
       }
 
@@ -29,7 +42,18 @@ const CreateForm = ({fromFormTOCookiestandadmin}) => {
      
      avgCookies.push(rowTotal)
       fromFormTOCookiestandadmin(avgCookies)
+      cookieStand.hourly_sales = avgCookies
+      axios.post(creatCookieStandUrl,cookieStand, config).then(res =>{
+        setResult(res.data);
+    });
+      console.log("cookie stand",cookieStand);
     };
+
+
+
+
+  // console.log("hhhhh ",result);
+  // console.log("iiii ",results);
 
   return (
     <form className="w-full px-5 mt-10" onSubmit={eventHandler}>
