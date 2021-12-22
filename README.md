@@ -27,4 +27,5 @@ yarn create next-app --example with-tailwindcss with-tailwindcss-app
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)). -->
 
 
-[pull request](https://github.com/tradalhariri/cookie-stand-admin/pull/1)
+[pull request React Lab 1](https://github.com/tradalhariri/cookie-stand-admin/pull/1)
+[pull request React Lab 2](https://github.com/tradalhariri/cookie-stand-admin/pull/2)
