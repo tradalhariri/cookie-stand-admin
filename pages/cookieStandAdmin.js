@@ -7,10 +7,9 @@ import CreateForm from "./createForm";
 import { useState} from 'react'
 
 const Cookiestandadmin = () => {
-    // const [hourlySales,setHourlySales ] = useState({})
     const [reports,setReports] = useState([])
-    const fromFormTOCookiestandadmin = (avgCookies)=>{        
-        setReports([...reports,avgCookies])
+    const fromFormTOCookiestandadmin = (avgCookies)=>{  
+        setReports([...reports,avgCookies])     
     }
   return (
     <>

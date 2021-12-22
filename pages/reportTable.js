@@ -3,24 +3,26 @@ import { timeSlots } from "../data";
 // import { useState} from 'react'
 
 const ReportTable = ({ reports }) => {
-  // const  createTableFooter = (reports)=>{
 
-  //     for (let h = 1; h < 16 ; h++) {
-  //       let tdTotalStoresPerHour = 0;
-  //       for (let s = 0; s < reports.length-1; s++) {
-  //         tdTotalStoresPerHour+=reports[s][h];
-  //       }
-  //       reports[reports.length -1].push(tdTotalStoresPerHour);
-  //   }
+  const calcFooter = ()=>{
+    const footer = []
+    for (let h = 1; h < 16 ; h++) {
+      let tdTotalStoresPerHour = 0;
+      for (let s = 0; s < reports.length; s++) {
+        tdTotalStoresPerHour+=reports[s][h];
+      }
+      
+      footer.push(tdTotalStoresPerHour);
+      
+  }
+  return footer;
+  }
+  
 
-  //   reports[reports.length-1].splice(0,0,"Totals")
-  //   return reports
-
-  // }
-  // let reportss = createTableFooter(reports)
-  // console.log(reports);
   return (
-    <table>
+    <div>
+    {reports.length == 0 ? <h2>No Cookie Stands Available</h2> :
+       <table>
       <thead className="bg-emerald-400">
         <tr>
           <th>Location</th>
@@ -45,12 +47,19 @@ const ReportTable = ({ reports }) => {
         })}
       </tbody>
 
-      <tfoot>
+       <tfoot>
         <tr>
-          <th>Totals</th>
+          <th className="bg-emerald-400">Totals</th>
+{
+ calcFooter().map((val,idx)=> <th className="bg-emerald-400">{val}</th>)
+
+}
+    
         </tr>
-      </tfoot>
+      </tfoot> 
     </table>
+      }
+      </div>
   );
 };
 
