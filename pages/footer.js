@@ -1,9 +1,14 @@
 import React from "react";
+import useResource from "../hooks/useResources";
 
-const Footer = ({ locationsNum }) => {
+const Footer = () => {
+  const { resources,loading} = useResource();
+  console.log("jjjj",resources);
+
+
   return (
-    <footer className="flex justify-between bg-[#15B981] py-4 px-2 items-center">
-      <p className="mx-auto">{locationsNum} Location World Wide</p>
+    <footer className="flex items-center justify-between px-2 py-4 bg-green-500">
+      <p className="mx-auto">{!loading? resources.length:0} Location World Wide</p>
     </footer>
   );
 };

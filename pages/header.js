@@ -1,15 +1,27 @@
 import React from 'react';
+import { useAuth } from "../contexts/auth";
 
 
 const Header = (props) => {
+  const { user, logout } = useAuth();
     return (
-    <header className="flex justify-between bg-[#15B981] py-4 items-center">
-        <h1 className="text-4xl mx-1">{props.title}</h1>
-        <div className="bg-white text-1xl mx-2 py-1 px-2">
-        <h2>Overview</h2>
-
+      <header className="flex flex-row justify-around w-full p-4 align-middle bg-green-500">
+      <h1 className="text-2xl">Cookie Stand Admin</h1>
+      {user ? (
+        <div className="flex justify-center gap-2">
+          <button className="p-1 bg-green-200 rounded-lg">
+            {user.username}
+          </button>
+          <button
+            onClick={() => logout()}
+            className="p-1 text-white bg-green-700 rounded-lg hover:bg-green-600"
+          >
+            Sign Out
+          </button>
+          <button className="p-1 bg-green-200 rounded-lg">Overview</button>
         </div>
-      </header>
+      ) : null}
+    </header>
     );
 };
 
