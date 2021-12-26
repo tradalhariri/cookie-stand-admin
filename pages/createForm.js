@@ -1,111 +1,77 @@
-import React from "react";
-import { useState} from 'react'
-const CreateForm = ({fromFormTOCookiestandadmin}) => {
-    const eventHandler = (e) => {
-      e.preventDefault();
-      const cookieStand = {
-        location: e.target.location.value,
-        minCustomers: e.target.min_customers.value,
-        maxCustomers: e.target.max_customers.value,
-        avgCookies: e.target.avg_cookies.value,
-      }
-      const calcAvgCookiePerHour = (cookieStand)=>{
-          
-          const randCustomer = Math.floor(Math.random() * (Math.floor(parseInt(cookieStand.maxCustomers)) - Math.ceil(parseInt( cookieStand.minCustomers)) + 1) + Math.ceil(parseInt( cookieStand.minCustomers)) );
-          return Math.floor(randCustomer * parseFloat(cookieStand.avgCookies));
-  
-      }
+import { useState } from "react";
+import { useAuth } from "../contexts/auth";
+export default function CreateForm({ handleNewCookiesStand }) {
+  const [minCustomerPerHour, setMinCustomerPerHour] = useState(0);
+  const [location, setLocation] = useState("");
+  const [maxCustomersPerHour, setMaxCustomerPerHour] = useState(0);
+  const [avgCookiesPerSale, setAvgCookiesPerSale] = useState(0);
+  const { addRow } = useAuth();
+  const handleAddStand = (e) => {
+    e.preventDefault();
+    handleNewCookiesStand({
+      location,
+      minCustomerPerHour,
+      maxCustomersPerHour,
+      avgCookiesPerSale,
+    });
 
-      const calcAvgCookies = (cookieStand)=>{
-          const avgCookies = [];
-          for (let i = 0; i < 14; i++) {
-            avgCookies.push(calcAvgCookiePerHour(cookieStand))
-          }
-          return avgCookies
-      }
-     const avgCookies = calcAvgCookies(cookieStand)
-     const rowTotal = avgCookies.reduce((partial_sum, a) => partial_sum + a, 0)
-     avgCookies.splice(0,0,cookieStand.location)
-     
-     avgCookies.push(rowTotal)
-      fromFormTOCookiestandadmin(avgCookies)
-    };
-
+    addRow();
+  };
   return (
-    <form className="w-full px-5 mt-10" onSubmit={eventHandler}>
-      <h2 className="w-full h-10 mb-5 text-3xl font-bold text-gray-700 ml-50 ">
-        {" "}
-        Create Cookie Stand{" "}
-      </h2>
+    <form
+      onSubmit={handleAddStand}
+      className="items-center p-4 m-auto mb-4 bg-[#86EFAC] rounded-lg items-cew-7/12 juestify-center itcontent-center items-cente md:flex md:flex-wrap md:justify-between md:flex-row"
+    >
+      <div className="flex flex-col mb-4 md:w-1/2">
+        <label> Add Location</label>
+        <input
+          value={location}
+          type="text"
+          className="flex-grow "
+          onChange={(e) => setLocation(e.target.value)}
+          required
+        />
 
-      <div className="flex w-full mb-5 md:justify-center md:items-center">
-        <label
-          className="block pr-4 mt-5 mb-1 font-bold text-gray-700"
-          for="location"
+      </div>
+      <div className="flex flex-col mb-4 md:w-1/2">
+      <button
+          type="submit"
+          className="px-3 py-4 bg-green-600 border text-grey-darkest md:ml-2 rounded-xl hover:bg-green-500"
         >
-          Location
-        </label>
-        <div className="md:w-full">
-          <input
-            className="w-full px-4 py-2 mt-5 bg-white focus:bg-gray-100"
-            id="location"
-            type="text"
-          />
-        </div>
+          create
+        </button>
       </div>
 
-      <div className="flex mb-6 ml-5 ">
-        <div className="w-full px-1 mb-6 md:w-1/4">
-          <label
-            className="block mb-2 text-sm font-bold tracking-wide text-gray-700 "
-            for="min_customers"
-          >
-            Minimum Customers per Hour
-          </label>
+      <section className="flex flex-row flex-wrap justify-between gap-4 p-4 w-100">
+        <div className="flex flex-col justify-center flex-grow p-2 align-middle bg-[#86EFAC] ">
+          <label className="m-auto">Minimum Customer per Hour</label>
           <input
-            className="block w-full px-4 py-3 mb-3 leading-tight text-gray-700 bg-gray-200 border appearance-none focus:outline-none focus:bg-white"
-            id="min_customers"
+            className="pl-2"
+            type="number"
+            value={minCustomerPerHour}
+            onChange={(e) => setMinCustomerPerHour(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col justify-center flex-grow p-2 align-middle bg-[#86EFAC]">
+          <label className="m-auto">Maximum Customers per Hour</label>
+          <input
+            className="pl-2"
+            value={maxCustomersPerHour}
+            onChange={(e) => setMaxCustomerPerHour(e.target.value)}
             type="number"
           />
         </div>
-
-        <div className="w-full px-1 mb-6 md:w-1/4">
-          <label
-            className="block mb-2 text-sm font-bold tracking-wide text-gray-700 "
-            for="max_customers"
-          >
-            Maximum Customers per Hour{" "}
-          </label>
+        <div className="flex flex-col justify-center flex-grow p-2 align-middle bg-[#86EFAC]">
+          <label className="m-auto">Average Cookies per Sale</label>
           <input
-            className="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
-            id="max_customers"
+            className="pl-2"
             type="number"
+            value={avgCookiesPerSale}
+            onChange={(e) => setAvgCookiesPerSale(e.target.value)}
           />
         </div>
 
-        <div className="w-full px-1 mb-6 md:w-1/4">
-          <label
-            className="block mb-2 text-sm font-bold tracking-wide text-gray-700 "
-            for="avg_cookies"
-          >
-            Average Cookies per Sale
-          </label>
-          <input
-            className="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
-            id="avg_cookies"
-            type="number"
-            step="0.1"
-          />
-        </div>
-
-        <div className="w-full px-1 mb-6 md:w-1/4">
-          <button className="block w-full px-4 py-6 mt-3 text-3xl text-gray-700 bg-[#15B981]">
-            Create
-          </button>
-        </div>
-      </div>
+      </section>
     </form>
   );
-};
-
-export default CreateForm;
+}

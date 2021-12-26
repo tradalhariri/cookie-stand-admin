@@ -1,11 +1,12 @@
-import { useState } from "react";
 import Cookiestandadmin from "./cookieStandAdmin";
+import LoginForm from "./LoginForm";
+import { useAuth } from "../contexts/auth";
 
-const App = () => {
-  return (
-    <>
-     <Cookiestandadmin/>
-    </>
-  );
+const Home = () => {
+  const {user} = useAuth()
+  return user ? <Cookiestandadmin /> : <LoginForm/>
 };
-export default App;
+
+export default Home;
+
+

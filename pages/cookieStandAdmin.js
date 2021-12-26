@@ -5,12 +5,34 @@ import Footer from "./footer";
 import ReportTable from "./reportTable";
 import CreateForm from "./createForm";
 import { useState} from 'react'
+import useResource from "../hooks/useResources";
 
-const Cookiestandadmin = () => {
-    const [reports,setReports] = useState([])
-    const fromFormTOCookiestandadmin = (avgCookies)=>{  
-        setReports([...reports,avgCookies])     
+
+const Cookiestandadmin = (props) => {
+  const { createResource } = useResource();
+  const [cookieStnds, setCookieStands] = useState([]);
+  const handleNewCookiesStand = ({
+    location,
+    minCustomerPerHour,
+    maxCustomersPerHour,
+    avgCookiesPerSale,
+  }) => {
+    createResource({
+      location: location,
+      description: "",
+      hourly_sales: getRandomArbitrary(minCustomerPerHour,maxCustomersPerHour,avgCookiesPerSale),
+      minimum_customers_per_hour: Number(minCustomerPerHour),
+      maximum_customers_per_hour: Number(maxCustomersPerHour),
+      average_cookies_per_sale: Number(avgCookiesPerSale).toFixed(2),
+    });
+  };
+  function getRandomArbitrary(min, max,avg) {
+    const l = []
+    for (var i = 0; i <14;i++){
+      l.push(Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + Math.ceil(min) ) * avg)
     }
+    return l
+}
   return (
     <>
       <Head>
@@ -21,16 +43,16 @@ const Cookiestandadmin = () => {
       <Header title="Cookie Stand Admin" />
       
       <main className="">
-    <div className="flex flex-col items-center justify-center flex-1 w-full text-center  py-5 ">
-          <div className = "flex w-2/3 bg-[#6FE6B7] my-5 rounded-lg">
-          <CreateForm fromFormTOCookiestandadmin={fromFormTOCookiestandadmin}/>
+    <div className="flex flex-col items-center justify-center flex-1 w-full py-5 text-center ">
+          <div className = "flex w-2/3 my-5  rounded-lg bg-[#86EFAC]">
+          <CreateForm handleNewCookiesStand={handleNewCookiesStand} />
           </div>
-          <ReportTable reports = {reports}/>
+          <ReportTable cookieStnds={cookieStnds}/>
          
         </div> 
 
       </main>
-      <Footer locationsNum = {reports.length}/>
+      <Footer />
     </>
   );
 };

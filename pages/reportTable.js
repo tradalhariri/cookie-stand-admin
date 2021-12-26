@@ -1,66 +1,62 @@
-import React from "react";
 import { timeSlots } from "../data";
-// import { useState} from 'react'
+import Locations from "./locations"
+import useResource from "../hooks/useResources";
+export default function ReportTable() {
+  const { resources, loading } = useResource();
 
-const ReportTable = ({ reports }) => {
-
-  const calcFooter = ()=>{
-    const footer = []
-    for (let h = 1; h < 16 ; h++) {
-      let tdTotalStoresPerHour = 0;
-      for (let s = 0; s < reports.length; s++) {
-        tdTotalStoresPerHour+=reports[s][h];
-      }
-      
-      footer.push(tdTotalStoresPerHour);
-      
+  let totals = new Array(14).fill(0);
+  if (!loading) {
+    totals = totals.map((_, idx) =>
+      resources
+        .map((item,idx) => item.hourly_sales)
+        .map((val) => val[idx])
+        .reduce((total, item) => total + item, 0)
+    );
   }
-  return footer;
-  }
-  
-
   return (
-    <div>
-    {reports.length == 0 ? <h2>No Cookie Stands Available</h2> :
-       <table>
-      <thead className="bg-emerald-400">
-        <tr>
-          <th>Location</th>
-          {timeSlots.map((hour, idx) => (
-            <th key={idx}>{hour}</th>
-          ))}
-          <th>Totals</th>
-        </tr>
-      </thead>
-      <tbody className="text-center">
-        {reports.map((avgCookie, idx) => {
-         
-           let color = idx % 2 == 0? "bg-emerald-400": "bg-emerald-300"
-          
-          return (
-            <tr key={idx} className={color}>
-              {avgCookie.map((cookie, i) => {
-                return <td key={i}  className="border border-gray-600">{cookie}</td>;
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-
-       <tfoot>
-        <tr>
-          <th className="bg-emerald-400">Totals</th>
-{
- calcFooter().map((val,idx)=> <th className="bg-emerald-400">{val}</th>)
-
-}
-    
-        </tr>
-      </tfoot> 
-    </table>
-      }
-      </div>
+    <>
+      {!loading ? (
+        resources.length ? (
+          <table className="w-7/12 m-auto mt-8 table-auto">
+            <thead>
+              <tr>
+                <th className="w-2/12 bg-green-500 border border-none">
+                  Location
+                </th>
+                {timeSlots.map((item, idx) => (
+                  <th key={idx} className="bg-green-500 border-none">
+                    {item}
+                  </th>
+                ))}
+                <th className="bg-green-500 border-none">Totals</th>
+              </tr>
+            </thead>
+              <Locations />
+            
+            <tfoot>
+              <tr>
+                <th className="bg-green-500 border-none">Totals</th>
+                {
+                  
+                totals.map((item, idx) => (
+                  <th key={idx} className="bg-green-500 border-none">
+                    {item}
+                  </th>
+                ))}
+                <th className="bg-green-500 border-none">
+                  {totals.reduce((total, item) => total + item, 0)}
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+        ) : (
+          <h2 className="mt-12 text-3xl text-center">
+            No Cookie Stands Available
+          </h2>
+        )
+      ) : (
+    null
+      )}
+    </>
   );
-};
-
-export default ReportTable;
+}
